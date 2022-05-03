@@ -51,7 +51,7 @@ def main():
 
         if update:
             pr_title = '[Automated] Update Ballerina in Action samples'
-            pr_body = 'Update Ballerina in Action samples for source code changes in RESTful API'
+            pr_body = 'Update Ballerina in Action samples for source code changes in Kafka consumer/producer'
             head_branch = 'update-kafka-consumer-producer'
             open_pull_request(pr_title, pr_body, head_branch)
 
