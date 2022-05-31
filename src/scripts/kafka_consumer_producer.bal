@@ -6,7 +6,7 @@ configurable string paymentSuccessOrders = "payment-success-orders";
 configurable decimal pollingInterval = 1;
 configurable string kafkaEndpoint = kafka:DEFAULT_URL;
 
-public type Order record {|
+public type Order readonly & record {|
     int id;
     string desc;
     PaymentStatus paymentStatus;
@@ -16,11 +16,6 @@ public enum PaymentStatus {
     SUCCESS,
     FAIL
 }
-
-public type OrderConsumerRecord record {|
-    *kafka:AnydataConsumerRecord;
-    Order value;
-|};
 
 final kafka:ConsumerConfiguration consumerConfigs = {
     groupId: groupId,
@@ -36,13 +31,13 @@ service on new kafka:Listener(kafkaEndpoint, consumerConfigs) {
         self.orderProducer = check new (kafkaEndpoint);
     }
 
-    remote function onConsumerRecord(OrderConsumerRecord[] records) returns error? {
-        check from OrderConsumerRecord {value} in records
-            where value.paymentStatus == SUCCESS
+    remote function onConsumerRecord(Order[] orders) returns error? {
+        check from Order 'order in orders
+            where 'order.paymentStatus == SUCCESS
             do {
                 check self.orderProducer->send({
                     topic: paymentSuccessOrders,
-                    value
+                    value: 'order
                 });
             };
     }
