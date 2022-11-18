@@ -27,7 +27,7 @@ def main():
         
     commit_message = 'Update Ballerina in Action samples'
     try:
-        update = commit_file('components/home-page/bal-action/kafka-consumer-producer.md', updated_file, 'update-kafka-consumer-producer', commit_message)[0]
+        update = commit_file('components/home-page/bal-action/action-bbe/kafka-consumer-producer.md', updated_file, 'update-kafka-consumer-producer', commit_message)[0]
 
         if update:
             pr_title = '[Automated] Update Ballerina in Action samples'
